@@ -7,56 +7,12 @@
 </head>
 <body>
 
-	<p>但王蒙先生说“现在的青少年不像当年那么热衷阅读”、“不止一人用网上的浏览来代替专心致志的阅读，用虚拟的世界代替真实的体验与思考了”，可就没道理了。不爱阅读爱浏览，不爱实体爱数字的青少年，当然有，还挺多。可是这些现象与不热衷阅读并不构成因果关系。</p>
+    <h3>Chinese Bookmarklets</h3>
 
-	<p>在探讨青少年是否热衷阅读的问题上，不应计较于阅读的媒介与方式是什么，甚至也不应过多计较于他们目前阅读的内容是什么，因为阅读本就是提供趣味与知识的方式之一，培养阅读习惯比规定阅读书目有意义得多。我没法像王蒙先生那样为青少年不热爱阅读经典而痛心疾首。我反而要说，不喜欢经典喜欢视听的人很多，但这很正常，这是传播渠道的天然优势，阅读从来就不只限于文学。</p>
+    <p>Add these bookmarklets to your browser to transform any website's text to either traditional or simplified. Also works on iOS Safari!</p>
 
-	<script type="text/javascript">
-	(function(){
-
-		// the minimum version of jQuery we want
-		var v = "1.3.2";
-
-		// check prior inclusion and version
-		if (window.jQuery === undefined || window.jQuery.fn.jquery < v) {
-			var done = false;
-			var script = document.createElement("script");
-			script.src = "http://ajax.googleapis.com/ajax/libs/jquery/" + v + "/jquery.min.js";
-			script.onload = script.onreadystatechange = function(){
-				if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
-					done = true;
-					initChineseBookmarklet();
-				}
-			};
-			document.getElementsByTagName("head")[0].appendChild(script);
-		} else {
-			initChineseBookmarklet();
-		}
-		
-		function initChineseBookmarklet() {
-			(window.chineseBookmarklet = function() {
-				var $text = $('h1, h2, h3, h4, h5, h6, p');
-				var textBlocks = [];
-				$text.each(function(){
-					textBlocks.push($text.text());
-				});
-				$.ajax({
-					url: 'http://arcane-peak-7536.herokuapp.com/tradify?callback=hello',
-					type: 'GET',
-					dataType: 'JSONP',
-					crossDomain: true,
-					data: {
-						'text': 'hello'
-					},
-					success: function(response){
-						console.log(response);
-					}
-				});
-			})();
-		}
-
-	})();
-	</script>
+    <a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://api.chineselevel.com/static/traditional.js';})();">To Traditional</a>
+    <a href="javascript:(function(){document.body.appendChild(document.createElement('script')).src='http://api.chineselevel.com/static/simplified.js';})();">To Simplified</a>
 
 </body>
 </html>

@@ -82,5 +82,6 @@ def tradify():
 def test_bookmarklet():
     return render_template('chinese-bookmarklet.html')
 
+
 if __name__ == '__main__':
     app.run(debug=True)
