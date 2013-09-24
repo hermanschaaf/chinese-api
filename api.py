@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 import os
 from datetime import timedelta
 from functools import wraps, update_wrapper
-from flask import Flask, request, render_template, jsonify, current_app
+from flask import Flask, make_response, request, render_template, jsonify, current_app
 
 import mafan
 
@@ -57,7 +58,6 @@ def jsonp(func):
             data = str(func(*args, **kwargs).data)
             content = str(callback) + '(' + data + ')'
             mimetype = 'application/javascript'
-            header("Access-Control-Allow-Origin: *");
             return current_app.response_class(content, mimetype=mimetype)
         else:
             return func(*args, **kwargs)
