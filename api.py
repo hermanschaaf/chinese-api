@@ -10,7 +10,6 @@ def jsonp(func):
     """Wraps JSONified output for JSONP requests."""
     @wraps(func)
     def decorated_function(*args, **kwargs):
-        print "DECORATED"
         callback = request.args.get('callback', False)
         if callback:
             data = str(func(*args, **kwargs).data)
