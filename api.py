@@ -64,7 +64,7 @@ def jsonp(func):
 
 @app.route('/simplify', methods=['POST', 'GET'])
 @jsonp
-@crossdomain
+@crossdomain('*')
 def simplify():
     text = request.args.get('text')
     d = {'text': mafan.simplify(text)}
@@ -72,7 +72,7 @@ def simplify():
 
 @app.route('/tradify', methods=['POST', 'GET'])
 @jsonp
-@crossdomain
+@crossdomain('*')
 def tradify():
     text = request.args.get('text')
     d = {'text': mafan.tradify(text)}
