@@ -35,7 +35,6 @@ def crossdomain(origin=None, methods=None, headers=None,
                 resp = make_response(f(*args, **kwargs))
             if not attach_to_all and request.method != 'OPTIONS':
                 return resp
-
             h = resp.headers
 
             h['Access-Control-Allow-Origin'] = origin
@@ -64,16 +63,16 @@ def jsonp(func):
     return decorated_function
 
 @app.route('/simplify', methods=['POST', 'GET'])
-@jsonp
 @crossdomain('*')
+@jsonp
 def simplify():
     text = request.args.get('text')
     d = {'text': mafan.simplify(text)}
     return jsonify(**d)
 
 @app.route('/tradify', methods=['POST', 'GET'])
-@jsonp
 @crossdomain('*')
+@jsonp
 def tradify():
     text = request.args.get('text')
     d = {'text': mafan.tradify(text)}
