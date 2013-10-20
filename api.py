@@ -62,6 +62,10 @@ def jsonp(func):
             return func(*args, **kwargs)
     return decorated_function
 
+# ========================================================
+# Text to Simplified (POST, GET and JSONP)
+# ========================================================
+
 @app.route('/simplify', methods=['POST', 'GET'])
 @crossdomain('*')
 @jsonp
@@ -70,6 +74,11 @@ def simplify():
     d = {'text': mafan.simplify(text)}
     return jsonify(**d)
 
+
+# ========================================================
+# Text to Traditional (POST, GET and JSONP)
+# ========================================================
+
 @app.route('/tradify', methods=['POST', 'GET'])
 @crossdomain('*')
 @jsonp
@@ -77,6 +86,32 @@ def tradify():
     text = request.args.get('text')
     d = {'text': mafan.tradify(text)}
     return jsonify(**d)
+
+# ========================================================
+# Split text (POST, GET and JSONP)
+# ========================================================
+
+def _split_text(text):
+    d = {'text': mafan.split_text(text)}
+    return d
+
+@app.route('/split', methods=['POST', 'GET'])
+def split_text():
+    text = request.form.get('text') or request.args.get('text')
+    return jsonify(**_split_text(text))
+
+@app.route('/jsonp/split', methods=['GET'])
+@crossdomain('*')
+@jsonp
+def split_text_jsonp():
+    text = request.args.get('text')
+    return jsonify(**_split_text(text))
+
+
+# ========================================================
+# App Index and helper pages
+# ========================================================
+
 
 @app.route('/')
 def test_bookmarklet():
