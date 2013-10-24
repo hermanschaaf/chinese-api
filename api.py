@@ -4,7 +4,12 @@ from datetime import timedelta
 from functools import wraps, update_wrapper
 from flask import Flask, make_response, request, render_template, jsonify, current_app
 
+import pymongo
 import mafan
+
+client = pymongo.MongoClient('localhost', 27017)
+db = client['cedict']
+words_collection = db['entries']
 
 app = Flask(__name__)
 
@@ -92,26 +97,56 @@ def tradify():
 # ========================================================
 
 def _split_text(text):
-    d = {'text': mafan.split_text(text)}
+    print text
+    # if text is a string, handle as such
+    if isinstance(text, basestring):
+        d = {'text': mafan.split_text(text)}
+    # elif text is a list, handle as such
+    else:
+        d = {'text': [mafan.split_text(t) for t in text]}
     return d
 
 @app.route('/split', methods=['POST', 'GET'])
 def split_text():
-    text = request.form.get('text') or request.args.get('text')
+    text = request.form.getlist('text[]') or request.args.getlist('text[]')
+    print text
+    if len(text) == 1:
+        text = text[0]
+    elif not text:
+        text = request.args.get('text')
+    print text
     return jsonify(**_split_text(text))
 
 @app.route('/jsonp/split', methods=['GET'])
 @crossdomain('*')
 @jsonp
 def split_text_jsonp():
-    text = request.args.get('text')
+    text = request.args.getlist('text[]')
+    if len(text) == 1:
+        text = text[0]
+    elif not text:
+        text = request.args.get('text')
     return jsonify(**_split_text(text))
+
+# ========================================================
+# Word definitions
+# ========================================================
+
+def _define(chinese):
+    d = words_collection.find({'$or': [{'simplified': chinese},{'traditional': chinese}]}, 
+        {'simplified': 1, 'traditional': 1, 'english': 1, 'pinyin': 1, '_id': 0})
+    return [e for e in d]
+
+@app.route('/define', methods=['GET', 'POST'])
+def define_word():
+    word = request.form.get('word') or request.args.get('word')
+    d = {'entries': _define(chinese=word)}
+    return jsonify(**d)
 
 
 # ========================================================
 # App Index and helper pages
 # ========================================================
-
 
 @app.route('/')
 def test_bookmarklet():

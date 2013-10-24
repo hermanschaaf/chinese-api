@@ -1,0 +1,22 @@
+{
+  "manifest_version": 2,
+
+  "name": "Chinese Reader",
+  "description": "Read and learn Chinese",
+  "version": "1.0",
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "css": ["css/jquery.qtip.min.css", "css/styles.css"],
+      "js": ["js/jquery-1.10.1.min.js", "js/jquery.qtip.min.js", "js/trad_chars.js", "js/reader.js"]
+    }
+  ],
+  "permissions": [
+    "http://api.chineselevel.com/*",
+    "http://localhost:5000/*"
+  ],
+  "browser_action": {
+    "default_icon": "images/logo.png"
+  },
+  "options_page": "options.html"
+}

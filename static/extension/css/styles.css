@@ -1,0 +1,26 @@
+.zh-word {
+    word-break:break-all;
+}
+.zh-word:hover {
+	background: #C3EFB2;
+}
+.qtip {
+	min-width: 200px;
+}
+.qtip-title {
+    font-size: 20px;
+    line-height: 20px;
+}
+.qtip-title .pinyin {
+    font-weight: normal;
+}
+.qtip-content {
+    font-size: 16px;
+    line-height: 1.3em;
+    padding: 10px;
+}
+.qtip-content ul.english {
+	list-style-type: none;
+	margin-left: 5px;
+	margin-bottom: 0;
+}
