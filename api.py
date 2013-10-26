@@ -97,7 +97,6 @@ def tradify():
 # ========================================================
 
 def _split_text(text):
-    print text
     # if text is a string, handle as such
     if isinstance(text, basestring):
         d = {'text': mafan.split_text(text)}
@@ -109,12 +108,10 @@ def _split_text(text):
 @app.route('/split', methods=['POST', 'GET'])
 def split_text():
     text = request.form.getlist('text[]') or request.args.getlist('text[]')
-    print text
     if len(text) == 1:
         text = text[0]
     elif not text:
         text = request.args.get('text')
-    print text
     return jsonify(**_split_text(text))
 
 @app.route('/jsonp/split', methods=['GET'])

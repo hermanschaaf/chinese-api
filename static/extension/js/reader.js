@@ -1,7 +1,8 @@
 (function(){
 
     var textNodes = [];
-    var splitNodes = []
+    var splitNodes = [];
+    var apiUrl = 'http://localhost:5000';
 
     function nativeTreeWalker(el) {
         var walker = document.createTreeWalker(
@@ -28,12 +29,13 @@
         function addTooltips($searchElement){
           var tooltip = $searchElement.find('.zh-word').qtip({
               content: {
-                text: 'hi',
+                text: ' ',
                 title: true,
                 button: true
               },
               show: {
-                  event: 'click',
+                  event: 'mouseenter',
+                  delay: 300,
                   solo: true,
                   modal: false
               },
@@ -58,7 +60,7 @@
                         'api': api,
                         'targetEl': $targetEl 
                       },
-                      url: 'http://localhost:5000/define',
+                      url: apiUrl + '/define',
                       type: 'POST',
                       dataType: 'json',
                       data: {
@@ -95,33 +97,45 @@
                 for (var i = 0; i < nodes.length; i++){
                     var $node = $(nodes[i]),
                         $parent = $node.parent();
-                    var ns = $parent.data('nodes');
+                    var ns = $parent.data('nodes'),
+                        hasEventListener = true;
                     if (!ns) {
                         ns = [];
+                        hasEventListener = false;
                     }
                     ns.push(i);
                     splitNodes.push(data.text[i]);
 
                     $parent.data('nodes', ns);
-                    $parent.one('mouseover', function(){
-                        // find all text node children
-                        var $textNodes = $(this).contents();
-                        var u = 0;
-                        var $p = $(this);
-                        $textNodes.each(function(){
-                            if (this.nodeType == 3) {
-                                var $node = $(this);
-                                var index = $p.data('nodes')[u];
-                                var newHtml = [];
-                                for (var y = 0; y < splitNodes[index].length; y++) {
-                                    newHtml.push('<span class="zh-word">' + splitNodes[index][y] + '</span>');
+                    if (!hasEventListener) {
+                        $parent.one('mouseover', function(){
+                            // find all text node children
+                            var $textNodes = $(this).contents();
+                            var u = 0;
+                            var $p = $(this);
+                            $textNodes.each(function(){
+                                if (this.nodeType == 3) {
+                                    var $node = $(this);
+                                    var index = $p.data('nodes')[u];
+                                    var newHtml = [];
+                                    if (splitNodes[index]) {
+                                        // splitNodes[index] is a hack; should never happen, but does sometimes
+                                        for (var y = 0; y < splitNodes[index].length; y++) {
+                                            var text = splitNodes[index][y];
+                                            if (text.match(/[\u3400-\u9FBF]/)) {
+                                                newHtml.push('<span class="zh-word">' + text + '</span>');
+                                            } else {
+                                                newHtml.push(text);
+                                            }
+                                        }
+                                        $node.replaceWith(newHtml.join(''));
+                                        u += 1;
+                                    }
                                 }
-                                $node.replaceWith(newHtml.join(''));
-                                u += 1;
-                            }
+                            });
+                            addTooltips($p);
                         });
-                        addTooltips($p);
-                    })
+                    }`
                 }
             }
         }
@@ -132,7 +146,7 @@
                 nodeValues.push(nodes[i].nodeValue);
             }
             $.ajax({
-              url: 'http://localhost:5000/split',
+              url: apiUrl + '/split',
               type: 'POST',
               dataType: 'json',
               data: {
