@@ -8,13 +8,29 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "css": ["css/jquery.qtip.min.css", "css/styles.css"],
-      "js": ["js/jquery-1.10.1.min.js", "js/jquery.qtip.min.js", "js/trad_chars.js", "js/reader.js"]
+      "js": [
+        "js/jquery-1.10.1.min.js", 
+        "js/handlebars.js", 
+        "js/jquery.qtip.min.js", 
+        "js/trad_chars.js", 
+        "js/reader.js"
+      ]
     }
   ],
   "permissions": [
     "http://api.chineselevel.com/*",
-    "http://localhost:5000/*"
+    "http://localhost:5000/*",
+    "tabs", 
+    "https://www.google.com/accounts/OAuthGetRequestToken",
+    "https://www.google.com/accounts/OAuthAuthorizeToken",
+    "https://www.google.com/accounts/OAuthGetAccessToken"
   ],
+  "background": {
+    "page": "background/background.html"
+  },
+  "sandbox": {
+     "pages": []
+  },
   "browser_action": {
     "default_icon": "images/logo.png"
   },

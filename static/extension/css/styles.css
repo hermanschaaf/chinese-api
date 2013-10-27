@@ -19,8 +19,25 @@
     line-height: 1.3em;
     padding: 10px;
 }
+.qtip-content .chinese {
+    font-weight: bold;
+}
 .qtip-content ul.english {
 	list-style-type: none;
 	margin-left: 5px;
 	margin-bottom: 0;
+}
+.buttons {
+    float: right;
+}
+.zh-btn {
+    background: #5BC332;
+    color: white;
+    font-weight: normal;
+    padding: 5px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.zh-btn:hover {
+    color: white;
 }

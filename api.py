@@ -68,6 +68,16 @@ def jsonp(func):
     return decorated_function
 
 # ========================================================
+# User-related functions
+# ========================================================
+
+def simplify():
+    text = request.args.get('text')
+    d = {'text': mafan.simplify(text)}
+    return jsonify(**d)
+
+
+# ========================================================
 # Text to Simplified (POST, GET and JSONP)
 # ========================================================
 
@@ -97,6 +107,8 @@ def tradify():
 # ========================================================
 
 def _split_text(text):
+    if not text:
+        return {'text': None}
     # if text is a string, handle as such
     if isinstance(text, basestring):
         d = {'text': mafan.split_text(text)}
@@ -132,12 +144,18 @@ def split_text_jsonp():
 def _define(chinese):
     d = words_collection.find({'$or': [{'simplified': chinese},{'traditional': chinese}]}, 
         {'simplified': 1, 'traditional': 1, 'english': 1, 'pinyin': 1, '_id': 0})
-    return [e for e in d]
+    ar = [e for e in d]
+    for a in ar:
+        a['english'] = a['english'].split('/')
+    return ar
 
 @app.route('/define', methods=['GET', 'POST'])
 def define_word():
     word = request.form.get('word') or request.args.get('word')
-    d = {'entries': _define(chinese=word)}
+    d = {
+        'entries': [_define(chinese=word)],
+        'components': [_define(chinese=c) for c in word]
+    }
     return jsonify(**d)
 
 
