@@ -29,6 +29,7 @@ chrome.runtime.onMessage.addListener(
     	authorize(function(resp, xhr){
     		sendResponse(JSON.parse(resp));
     	})
+      return true;
     }
-    return true;
+    return false;
 });
