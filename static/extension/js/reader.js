@@ -176,15 +176,9 @@
         for (var i = 0; i < nodes.length; i++) {
             nodeValues.push(nodes[i].nodeValue);
         }
-        $.ajax({
-          url: apiUrl + '/split',
-          type: 'POST',
-          dataType: 'json',
-          data: {
-              'text': nodeValues
-          },
-          success: wrapper(nodes)
-        });
+        // send message to background page to process words
+        // using jieba.js
+        chrome.runtime.sendMessage({action: "split", data: nodeValues}, wrapper(nodes));
     }
 
     function transformCharacters(nodes) {
