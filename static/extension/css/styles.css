@@ -44,24 +44,24 @@
 
 /* Selection classes */
 
-::selection {
+.zh-word::selection {
     background: #ffffff;
 }
-.easy:nth-of-type(2n)::selection {
+.zh-word.easy:nth-of-type(2n)::selection {
     background: #a7ffa7;
 }
-.easy:nth-of-type(2n+1)::selection {
+.zh-word.easy:nth-of-type(2n+1)::selection {
     background: #77ff77;
 }
-.medium:nth-of-type(2n)::selection {
+.zh-word.medium:nth-of-type(2n)::selection {
     background: #ffffa7;
 }
-.medium:nth-of-type(2n+1)::selection {
+.zh-word.medium:nth-of-type(2n+1)::selection {
     background: #ffff77;
 }
-.hard:nth-of-type(2n)::selection {
+.zh-word.hard:nth-of-type(2n)::selection {
     background: #ffa7a7;
 }
-.hard:nth-of-type(2n+1)::selection {
+.zh-word.hard:nth-of-type(2n+1)::selection {
     background: #ff7777;
 }
